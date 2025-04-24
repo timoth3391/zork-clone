@@ -2,7 +2,8 @@ class Game {
     constructor() {
         this.rooms = {
             entrance: {
-                description: "You stand at the entrance of a dark dungeon. The air is damp and cold. A flickering torch barely illuminates the stone walls. To the north, a narrow passage leads deeper into the dungeon.",
+                description:
+                    "You stand at the entrance of a dark dungeon. The air is damp and cold. A flickering torch barely illuminates the stone walls. To the north, a narrow passage leads deeper into the dungeon.",
                 exits: { north: "corridor1" },
                 items: ["torch"],
                 enemies: [],
@@ -18,7 +19,8 @@ class Game {
                 }
             },
             corridor1: {
-                description: "A long, narrow corridor stretches before you. The walls are covered in strange carvings. You hear distant dripping water. There's a door to the east and the corridor continues north.",
+                description:
+                    "A long, narrow corridor stretches before you. The walls are covered in strange carvings. You hear distant dripping water. There's a door to the east and the corridor continues north.",
                 exits: { north: "hall", east: "treasure1", south: "entrance" },
                 items: [],
                 enemies: ["skeleton"],
@@ -34,8 +36,14 @@ class Game {
                 }
             },
             hall: {
-                description: "You enter a large hall with high ceilings. Broken pillars lie scattered across the floor. A large chandelier hangs precariously from the ceiling. Exits lead in all directions.",
-                exits: { north: "corridor2", east: "trap", south: "corridor1", west: "treasure2" },
+                description:
+                    "You enter a large hall with high ceilings. Broken pillars lie scattered across the floor. A large chandelier hangs precariously from the ceiling. Exits lead in all directions.",
+                exits: {
+                    north: "corridor2",
+                    east: "trap",
+                    south: "corridor1",
+                    west: "treasure2"
+                },
                 items: ["health potion"],
                 enemies: ["goblin"],
                 pixelArt: {
@@ -53,7 +61,8 @@ class Game {
                 }
             },
             corridor2: {
-                description: "A winding corridor with several alcoves. The air is thick with dust. You see scratch marks on the walls.",
+                description:
+                    "A winding corridor with several alcoves. The air is thick with dust. You see scratch marks on the walls.",
                 exits: { south: "hall", east: "exit" },
                 items: ["key"],
                 enemies: ["spider"],
@@ -70,7 +79,8 @@ class Game {
                 }
             },
             treasure1: {
-                description: "A small room with a wooden chest in the center. The walls are lined with empty weapon racks.",
+                description:
+                    "A small room with a wooden chest in the center. The walls are lined with empty weapon racks.",
                 exits: { west: "corridor1" },
                 items: [],
                 chestContents: ["gold coins"],
@@ -88,7 +98,8 @@ class Game {
                 }
             },
             treasure2: {
-                description: "A hidden alcove containing a golden chest. The walls shimmer with embedded gems.",
+                description:
+                    "A hidden alcove containing a golden chest. The walls shimmer with embedded gems.",
                 exits: { east: "hall" },
                 items: [],
                 chestContents: ["diamond"],
@@ -106,7 +117,8 @@ class Game {
                 }
             },
             trap: {
-                description: "A seemingly empty room. The floor tiles look suspiciously clean.",
+                description:
+                    "A seemingly empty room. The floor tiles look suspiciously clean.",
                 exits: { west: "hall" },
                 items: [],
                 enemies: [],
@@ -123,7 +135,8 @@ class Game {
                 }
             },
             exit: {
-                description: "A heavy iron door stands before you, locked with a large padlock. This must be the way out!",
+                description:
+                    "A heavy iron door stands before you, locked with a large padlock. This must be the way out!",
                 exits: { west: "corridor2" },
                 items: [],
                 enemies: [],
@@ -147,29 +160,29 @@ class Game {
             inventory: [],
             health: 100,
             hasKey: false,
-            previousRoom: null  // Track the previous room
+            previousRoom: null // Track the previous room
         };
 
-        this.gameText = document.getElementById('game-text');
-        this.commandInput = document.getElementById('command-input');
-        this.canvas = document.getElementById('pixel-art');
-        this.ctx = this.canvas.getContext('2d');
-        
+        this.gameText = document.getElementById("game-text");
+        this.commandInput = document.getElementById("command-input");
+        this.canvas = document.getElementById("pixel-art");
+        this.ctx = this.canvas.getContext("2d");
+
         // Set up canvas sizing
         this.resizeCanvas();
-        window.addEventListener('resize', () => this.resizeCanvas());
+        window.addEventListener("resize", () => this.resizeCanvas());
 
         // Load background images
         this.backgrounds = {
             entryway: new Image(),
             hallway: new Image()
         };
-        this.backgrounds.entryway.src = 'assets/entryway.PNG';
-        this.backgrounds.hallway.src = 'assets/hallway.PNG';
+        this.backgrounds.entryway.src = "assets/entryway.PNG";
+        this.backgrounds.hallway.src = "assets/hallway.PNG";
 
         this.particles = [];
         this.fadeOutElements = [];
-        this.dyingElements = [];  // Track dying enemies for rotation animation
+        this.dyingElements = []; // Track dying enemies for rotation animation
         this.setupEventListeners();
         this.printWelcome();
         this.lastTime = 0;
@@ -184,12 +197,12 @@ class Game {
         };
 
         // Get UI elements
-        this.enemyHealthDisplay = document.querySelector('.enemy-health');
-        this.playerHealthDisplay = document.querySelector('.player-health');
-        
+        this.enemyHealthDisplay = document.querySelector(".enemy-health");
+        this.playerHealthDisplay = document.querySelector(".player-health");
+
         // Hide health displays initially
-        this.enemyHealthDisplay.style.display = 'none';
-        this.playerHealthDisplay.style.display = 'none';
+        this.enemyHealthDisplay.style.display = "none";
+        this.playerHealthDisplay.style.display = "none";
 
         // Load enemy images
         this.enemyImages = {
@@ -198,24 +211,24 @@ class Game {
             bandit: new Image(),
             blob: new Image()
         };
-        
-        this.enemyImages.skeleton.src = 'assets/skeleton.PNG';
-        this.enemyImages.goblin.src = 'assets/goblin.PNG';
-        this.enemyImages.bandit.src = 'assets/bandit.PNG';
-        this.enemyImages.blob.src = 'assets/blob.PNG';
+
+        this.enemyImages.skeleton.src = "assets/skeleton.PNG";
+        this.enemyImages.goblin.src = "assets/goblin.PNG";
+        this.enemyImages.bandit.src = "assets/bandit.PNG";
+        this.enemyImages.blob.src = "assets/blob.PNG";
 
         // Load item images
         this.itemImages = {
             chest: new Image(),
             chestOpen: new Image()
         };
-        this.itemImages.chest.src = 'assets/treasure_chest.png';
-        this.itemImages.chestOpen.src = 'assets/treasure_chest-open.png';
+        this.itemImages.chest.src = "assets/treasure_chest.png";
+        this.itemImages.chestOpen.src = "assets/treasure_chest-open.png";
 
         // Initialize sound effects
         this.sounds = {
-            death: new Audio('assets/death.wav'),
-            hit: new Audio('assets/hit.wav')
+            death: new Audio("assets/death.wav"),
+            hit: new Audio("assets/hit.wav")
         };
     }
 
@@ -223,7 +236,7 @@ class Game {
         const container = this.canvas.parentElement;
         this.canvas.width = container.clientWidth;
         this.canvas.height = container.clientHeight;
-        
+
         // Store the aspect ratio for calculations
         this.aspectRatio = this.canvas.width / this.canvas.height;
     }
@@ -232,7 +245,7 @@ class Game {
         window.requestAnimationFrame((timestamp) => {
             const deltaTime = timestamp - this.lastTime;
             this.lastTime = timestamp;
-            
+
             this.updateParticles(deltaTime);
             this.updateFadeOuts(deltaTime);
             this.renderPixelArt();
@@ -242,7 +255,7 @@ class Game {
 
     updateParticles(deltaTime) {
         // Update particle positions and lifetimes
-        this.particles = this.particles.filter(particle => {
+        this.particles = this.particles.filter((particle) => {
             particle.x += particle.vx * (deltaTime / 16);
             particle.y += particle.vy * (deltaTime / 16);
             particle.life -= deltaTime;
@@ -253,13 +266,13 @@ class Game {
 
     updateFadeOuts(deltaTime) {
         // Update fade-out animations
-        this.fadeOutElements = this.fadeOutElements.filter(element => {
+        this.fadeOutElements = this.fadeOutElements.filter((element) => {
             element.opacity -= deltaTime * 0.003;
             return element.opacity > 0;
         });
 
         // Update dying animations
-        this.dyingElements = this.dyingElements.filter(element => {
+        this.dyingElements = this.dyingElements.filter((element) => {
             // Calculate rotation speed to complete 90 degrees in 500ms
             const rotationSpeed = (90 / 500) * deltaTime;
             element.rotation = Math.min(90, element.rotation + rotationSpeed); // Cap at 90 degrees
@@ -268,7 +281,7 @@ class Game {
         });
     }
 
-    createParticles(x, y, color, type = 'collect') {
+    createParticles(x, y, color, type = "collect") {
         const particleConfigs = {
             collect: {
                 count: 15,
@@ -285,7 +298,7 @@ class Game {
         };
 
         const config = particleConfigs[type];
-        
+
         for (let i = 0; i < config.count; i++) {
             const angle = (Math.PI * 2 * i) / config.count;
             const speed = config.speed * (0.5 + Math.random() * 0.5);
@@ -305,62 +318,97 @@ class Game {
 
     renderPixelArt() {
         // Clear canvas with black
-        this.ctx.fillStyle = '#000';
+        this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw appropriate background based on room type
         const room = this.rooms[this.player.currentRoom];
-        const isAtDoor = room.isExit || room.currentRoom === 'entrance' || 
-                        room.description.toLowerCase().includes('door');
-        
-        const backgroundImage = isAtDoor ? this.backgrounds.entryway : this.backgrounds.hallway;
-        
+        const isAtDoor =
+            room.isExit ||
+            room.currentRoom === "entrance" ||
+            room.description.toLowerCase().includes("door");
+
+        const backgroundImage = isAtDoor
+            ? this.backgrounds.entryway
+            : this.backgrounds.hallway;
+
         if (backgroundImage.complete) {
             // Fill the entire canvas with the background while maintaining aspect ratio
-            const bgAspectRatio = backgroundImage.width / backgroundImage.height;
+            const bgAspectRatio =
+                backgroundImage.width / backgroundImage.height;
             let drawWidth = this.canvas.width;
             let drawHeight = this.canvas.height;
-            
+
             if (bgAspectRatio > this.aspectRatio) {
                 // Background is wider than canvas
                 drawWidth = this.canvas.height * bgAspectRatio;
                 const x = (this.canvas.width - drawWidth) / 2;
-                this.ctx.drawImage(backgroundImage, x, 0, drawWidth, drawHeight);
+                this.ctx.drawImage(
+                    backgroundImage,
+                    x,
+                    0,
+                    drawWidth,
+                    drawHeight
+                );
             } else {
                 // Background is taller than canvas
                 drawHeight = this.canvas.width / bgAspectRatio;
                 const y = (this.canvas.height - drawHeight) / 2;
-                this.ctx.drawImage(backgroundImage, 0, y, drawWidth, drawHeight);
+                this.ctx.drawImage(
+                    backgroundImage,
+                    0,
+                    y,
+                    drawWidth,
+                    drawHeight
+                );
             }
         }
-        
+
         if (room.pixelArt) {
             // Draw non-enemy elements first (excluding walls)
-            room.pixelArt.elements.forEach(element => {
-                if (!['skeleton', 'goblin', 'bandit', 'blob', 'wall'].includes(element.type)) {
-                    if (element.type === 'chest') {
-                        this.drawItem('chest', element.x, element.y);
+            room.pixelArt.elements.forEach((element) => {
+                if (
+                    !["skeleton", "goblin", "bandit", "blob", "wall"].includes(
+                        element.type
+                    )
+                ) {
+                    if (element.type === "chest") {
+                        this.drawItem("chest", element.x, element.y);
                     } else {
-                        this.ctx.fillStyle = element.color || '#fff';
+                        this.ctx.fillStyle = element.color || "#fff";
                         if (element.shape) {
-                            this.drawPixelShape(element.shape, element.x, element.y, element.pixelSize || 8);
+                            this.drawPixelShape(
+                                element.shape,
+                                element.x,
+                                element.y,
+                                element.pixelSize || 8
+                            );
                         } else if (element.width && element.height) {
-                            this.ctx.fillRect(element.x, element.y, element.width, element.height);
+                            this.ctx.fillRect(
+                                element.x,
+                                element.y,
+                                element.width,
+                                element.height
+                            );
                         }
                     }
                 }
             });
 
             // Draw enemies last and larger
-            room.pixelArt.elements.forEach(element => {
-                if (['skeleton', 'goblin', 'bandit', 'blob'].includes(element.type)) {
+            room.pixelArt.elements.forEach((element) => {
+                if (
+                    ["skeleton", "goblin", "bandit", "blob"].includes(
+                        element.type
+                    )
+                ) {
                     this.drawEnemy(element.type, 0, 0); // x,y ignored now as positioning is handled in drawEnemy
                 }
             });
         }
 
         // Draw particles
-        this.particles.forEach(particle => {
+        this.particles.forEach((particle) => {
             this.ctx.globalAlpha = particle.opacity;
             this.ctx.fillStyle = particle.color;
             this.ctx.beginPath();
@@ -370,40 +418,50 @@ class Game {
         this.ctx.globalAlpha = 1;
 
         // Draw fade-out elements
-        this.fadeOutElements.forEach(element => {
+        this.fadeOutElements.forEach((element) => {
             this.ctx.globalAlpha = element.opacity;
-            if (element.type === 'skeleton') {
+            if (element.type === "skeleton") {
                 const centerX = (this.canvas.width - 180) / 2;
                 const baseY = this.canvas.height - 200;
-                this.drawEnemy('skeleton', centerX, baseY);
-            } else if (!['wall'].includes(element.type)) {
-                this.ctx.fillStyle = element.color || '#fff';
+                this.drawEnemy("skeleton", centerX, baseY);
+            } else if (!["wall"].includes(element.type)) {
+                this.ctx.fillStyle = element.color || "#fff";
                 if (element.shape) {
-                    this.drawPixelShape(element.shape, element.x, element.y, element.pixelSize || 8);
+                    this.drawPixelShape(
+                        element.shape,
+                        element.x,
+                        element.y,
+                        element.pixelSize || 8
+                    );
                 } else if (element.width && element.height) {
-                    this.ctx.fillRect(element.x, element.y, element.width, element.height);
+                    this.ctx.fillRect(
+                        element.x,
+                        element.y,
+                        element.width,
+                        element.height
+                    );
                 }
             }
         });
         this.ctx.globalAlpha = 1;
 
         // Draw dying elements with rotation
-        this.dyingElements.forEach(element => {
+        this.dyingElements.forEach((element) => {
             this.ctx.save();
             // Rotate around center of the enemy
-            const centerX = element.x + element.width/2;
-            const centerY = element.y + element.height/2;
+            const centerX = element.x + element.width / 2;
+            const centerY = element.y + element.height / 2;
             this.ctx.translate(centerX, centerY);
-            this.ctx.rotate(element.rotation * Math.PI / 180); // Convert degrees to radians
+            this.ctx.rotate((element.rotation * Math.PI) / 180); // Convert degrees to radians
             this.ctx.translate(-centerX, -centerY);
-            
+
             // Draw the rotated enemy
-            if (element.type === 'skeleton') {
-                this.drawEnemy('skeleton', element.x, element.y);
+            if (element.type === "skeleton") {
+                this.drawEnemy("skeleton", element.x, element.y);
             } else {
                 this.drawEnemy(element.type, element.x, element.y);
             }
-            
+
             this.ctx.restore();
         });
     }
@@ -412,12 +470,13 @@ class Game {
         const image = this.enemyImages[type];
         if (image.complete) {
             // All enemies are now positioned like the skeleton
-            const size = type === 'skeleton' ? 
-                this.canvas.height * 0.8 : // Skeleton remains larger
-                this.canvas.height * 0.4;  // Other enemies at 40%
-            
+            const size =
+                type === "skeleton"
+                    ? this.canvas.height * 0.8 // Skeleton remains larger
+                    : this.canvas.height * 0.4; // Other enemies at 40%
+
             const centerX = (this.canvas.width - size) / 2;
-            const baseY = this.canvas.height - size - (this.canvas.height * 0.1); // 10% padding from bottom
+            const baseY = this.canvas.height - size - this.canvas.height * 0.1; // 10% padding from bottom
             this.ctx.drawImage(image, centerX, baseY, size, size);
         }
     }
@@ -433,45 +492,58 @@ class Game {
     }
 
     drawItem(type, x, y) {
-        if (type === 'chest') {
+        if (type === "chest") {
             const room = this.rooms[this.player.currentRoom];
-            const chestElement = room.pixelArt.elements.find(e => e.type === 'chest');
-            const image = chestElement && chestElement.isOpen ? 
-                this.itemImages.chestOpen : 
-                this.itemImages.chest;
+            const chestElement = room.pixelArt.elements.find(
+                (e) => e.type === "chest"
+            );
+            const image =
+                chestElement && chestElement.isOpen
+                    ? this.itemImages.chestOpen
+                    : this.itemImages.chest;
 
             if (image.complete) {
                 // Scale chest size based on canvas height
                 const size = this.canvas.height * 0.4;
                 // Position the chest at the bottom of the screen with some padding
                 const centerX = (this.canvas.width - size) / 2;
-                const bottomY = this.canvas.height - size - (this.canvas.height * 0.1); // 10% padding from bottom
+                const bottomY =
+                    this.canvas.height - size - this.canvas.height * 0.1; // 10% padding from bottom
                 this.ctx.drawImage(image, centerX, bottomY, size, size);
             }
         }
     }
 
     setupEventListeners() {
-        this.commandInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+        this.commandInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
                 const command = this.commandInput.value.toLowerCase().trim();
-                this.commandInput.value = '';
+                this.commandInput.value = "";
                 this.handleCommand(command);
             }
         });
     }
 
     printWelcome() {
-        this.printText("Welcome to the Dungeon Crawler!", 'welcome-message');
-        this.printText("You find yourself at the entrance of a mysterious dungeon. Your goal is to find the exit.", 'welcome-message');
-        this.printText("Available commands: look, go [direction], go back, take [item], use [item], open chest, inventory, attack [enemy], help", 'welcome-message');
-        this.printText("Directions: north, south, east, west", 'welcome-message');
-        this.printText("\n");  // Add extra line break before room description
+        this.printText("Welcome to the Dungeon Crawler!", "welcome-message");
+        this.printText(
+            "You find yourself at the entrance of a mysterious dungeon. Your goal is to find the exit.",
+            "welcome-message"
+        );
+        this.printText(
+            "Available commands: look, go [direction], go back, take [item], use [item], open chest, inventory, attack [enemy], help",
+            "welcome-message"
+        );
+        this.printText(
+            "Directions: north, south, east, west",
+            "welcome-message"
+        );
+        this.printText("\n"); // Add extra line break before room description
         this.printRoomDescription();
     }
 
-    printText(text, className = '') {
-        const p = document.createElement('p');
+    printText(text, className = "") {
+        const p = document.createElement("p");
         p.textContent = text;
         if (className) {
             p.className = className;
@@ -482,62 +554,72 @@ class Game {
 
     printRoomDescription() {
         const room = this.rooms[this.player.currentRoom];
-        this.printText("\n" + room.description, 'room-description');
-        
+        this.printText("\n" + room.description, "room-description");
+
         if (room.items.length > 0) {
-            this.printText("You see: " + room.items.join(", "), 'room-info');
+            this.printText("You see: " + room.items.join(", "), "room-info");
         }
-        
+
         if (room.chestContents && !room.chestOpen) {
-            this.printText("There is a chest in the room.", 'room-info');
+            this.printText("There is a chest in the room.", "room-info");
         }
-        
+
         if (room.enemies.length > 0) {
-            this.printText("Enemies present: " + room.enemies.join(", "), 'room-info');
+            this.printText(
+                "Enemies present: " + room.enemies.join(", "),
+                "room-info"
+            );
         }
-        
-        this.printText("Exits: " + Object.keys(room.exits).join(", "), 'room-info');
+
+        this.printText(
+            "Exits: " + Object.keys(room.exits).join(", "),
+            "room-info"
+        );
     }
 
     handleCommand(command) {
-        const words = command.split(' ');
+        const words = command.split(" ");
         const action = words[0];
-        const target = words.slice(1).join(' ');
+        const target = words.slice(1).join(" ");
 
         switch (action) {
-            case 'look':
+            case "look":
                 this.printRoomDescription();
                 break;
-            case 'go':
-                if (target === 'back') {
+            case "go":
+                if (target === "back") {
                     this.goBack();
                 } else {
                     this.movePlayer(target);
                 }
                 break;
-            case 'back':  // Allow just typing 'back' as well
+            case "back": // Allow just typing 'back' as well
                 this.goBack();
                 break;
-            case 'take':
+            case "take":
                 this.takeItem(target);
                 break;
-            case 'use':
+            case "use":
                 this.useItem(target);
                 break;
-            case 'open':
+            case "open":
                 this.openChest(target);
                 break;
-            case 'inventory':
+            case "inventory":
                 this.showInventory();
                 break;
-            case 'attack':
+            case "attack":
                 this.attackEnemy(target);
                 break;
-            case 'help':
-                this.printText("Available commands: look, go [direction], go back, take [item], use [item], open chest, inventory, attack [enemy], help");
+            case "help":
+                this.printText(
+                    "Available commands: look, go [direction], go back, take [item], use [item], open chest, inventory, attack [enemy], help"
+                );
                 break;
             default:
-                this.printText("I don't understand that command. Type 'help' for available commands.");
+                this.printText(
+                    "I don't understand that command. Type 'help' for available commands."
+                );
         }
     }
 
@@ -549,42 +631,42 @@ class Game {
 
         // Store current room before moving
         const currentRoom = this.player.currentRoom;
-        
+
         // Move to previous room
         this.player.currentRoom = this.player.previousRoom;
-        
+
         // Update previous room to current room
         this.player.previousRoom = currentRoom;
-        
+
         // Perform standard room entry actions
         this.printRoomDescription();
         this.renderPixelArt();
-        
+
         // Reset enemy health in the room we're entering
         const roomEnemies = this.rooms[this.player.currentRoom].enemies;
-        roomEnemies.forEach(enemy => {
+        roomEnemies.forEach((enemy) => {
             this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
         });
-        
+
         // Update battle UI
         this.updateBattleUI();
     }
 
     movePlayer(direction) {
         const room = this.rooms[this.player.currentRoom];
-        
+
         if (room.exits[direction]) {
             const newRoom = room.exits[direction];
-            
+
             // Store current room before moving
             this.player.previousRoom = this.player.currentRoom;
-            
+
             // Reset health of enemies in the new room
             const newRoomEnemies = this.rooms[newRoom].enemies;
-            newRoomEnemies.forEach(enemy => {
+            newRoomEnemies.forEach((enemy) => {
                 this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
             });
-            
+
             if (this.rooms[newRoom].trap) {
                 this.player.health -= 20;
                 this.printText("You triggered a trap! You take 20 damage.");
@@ -594,19 +676,23 @@ class Game {
                     return;
                 }
             }
-            
+
             this.player.currentRoom = newRoom;
             this.printRoomDescription();
             this.renderPixelArt();
-            
+
             // Show/hide battle UI based on enemies present
             this.updateBattleUI();
-            
+
             if (this.rooms[newRoom].isExit) {
                 if (this.player.hasKey) {
-                    this.printText("You use the key to unlock the door and escape the dungeon! Congratulations!");
+                    this.printText(
+                        "You use the key to unlock the door and escape the dungeon! Congratulations!"
+                    );
                 } else {
-                    this.printText("The door is locked. You need a key to open it.");
+                    this.printText(
+                        "The door is locked. You need a key to open it."
+                    );
                 }
             }
         } else {
@@ -617,28 +703,28 @@ class Game {
     takeItem(item) {
         const room = this.rooms[this.player.currentRoom];
         const itemIndex = room.items.indexOf(item);
-        
+
         if (itemIndex !== -1) {
             // Find the visual element before removing it
             const itemTypes = {
-                "torch": "torch",
+                torch: "torch",
                 "health potion": "potion",
-                "key": "key",
+                key: "key",
                 "gold coins": "coins",
-                "diamond": "diamond"
+                diamond: "diamond"
             };
-            
+
             const visualElement = room.pixelArt.elements.find(
-                element => element.type === itemTypes[item]
+                (element) => element.type === itemTypes[item]
             );
 
             if (visualElement) {
                 // Create particles at item location
                 this.createParticles(
-                    visualElement.x + 20, 
-                    visualElement.y + 20, 
-                    visualElement.color || '#ff0',
-                    'collect'
+                    visualElement.x + 20,
+                    visualElement.y + 20,
+                    visualElement.color || "#ff0",
+                    "collect"
                 );
 
                 // Add fade-out animation
@@ -650,14 +736,14 @@ class Game {
 
             // Remove item from room's items array
             room.items.splice(itemIndex, 1);
-            
+
             // Remove item from pixelArt elements
             if (room.pixelArt && room.pixelArt.elements) {
                 room.pixelArt.elements = room.pixelArt.elements.filter(
-                    element => element.type !== itemTypes[item]
+                    (element) => element.type !== itemTypes[item]
                 );
             }
-            
+
             this.player.inventory.push(item);
             if (item === "key") {
                 this.player.hasKey = true;
@@ -672,8 +758,12 @@ class Game {
         if (this.player.inventory.includes(item)) {
             if (item === "health potion") {
                 this.player.health = Math.min(100, this.player.health + 30);
-                this.player.inventory = this.player.inventory.filter(i => i !== item);
-                this.printText("You drink the health potion and restore 30 health!");
+                this.player.inventory = this.player.inventory.filter(
+                    (i) => i !== item
+                );
+                this.printText(
+                    "You drink the health potion and restore 30 health!"
+                );
             } else {
                 this.printText("You can't use that item right now.");
             }
@@ -694,31 +784,36 @@ class Game {
     updateHealthDisplays() {
         // Update player health
         const playerHealthPercent = (this.player.health / 100) * 100;
-        this.playerHealthDisplay.querySelector('.hp').textContent = `HP: ${this.player.health}/100`;
-        this.playerHealthDisplay.querySelector('.health-bar-fill').style.width = `${playerHealthPercent}%`;
-        
+        this.playerHealthDisplay.querySelector(".hp").textContent =
+            `HP: ${this.player.health}/100`;
+        this.playerHealthDisplay.querySelector(".health-bar-fill").style.width =
+            `${playerHealthPercent}%`;
+
         // Update enemy health if in combat
         const currentRoom = this.rooms[this.player.currentRoom];
         if (currentRoom.enemies.length > 0) {
             const enemy = currentRoom.enemies[0];
             const enemyHealth = this.enemyHealth[enemy];
-            const enemyHealthPercent = (enemyHealth.current / enemyHealth.max) * 100;
-            
-            this.enemyHealthDisplay.querySelector('.name').textContent = enemy.toUpperCase();
-            this.enemyHealthDisplay.querySelector('.hp').textContent = 
+            const enemyHealthPercent =
+                (enemyHealth.current / enemyHealth.max) * 100;
+
+            this.enemyHealthDisplay.querySelector(".name").textContent =
+                enemy.toUpperCase();
+            this.enemyHealthDisplay.querySelector(".hp").textContent =
                 `HP: ${enemyHealth.current}/${enemyHealth.max}`;
-            this.enemyHealthDisplay.querySelector('.health-bar-fill').style.width = 
-                `${enemyHealthPercent}%`;
+            this.enemyHealthDisplay.querySelector(
+                ".health-bar-fill"
+            ).style.width = `${enemyHealthPercent}%`;
         }
     }
 
     updateBattleUI() {
         const room = this.rooms[this.player.currentRoom];
         const hasEnemies = room.enemies.length > 0;
-        
-        this.enemyHealthDisplay.style.display = hasEnemies ? 'block' : 'none';
-        this.playerHealthDisplay.style.display = hasEnemies ? 'block' : 'none';
-        
+
+        this.enemyHealthDisplay.style.display = hasEnemies ? "block" : "none";
+        this.playerHealthDisplay.style.display = hasEnemies ? "block" : "none";
+
         if (hasEnemies) {
             this.updateHealthDisplays();
         }
@@ -726,11 +821,13 @@ class Game {
 
     attemptRun() {
         const chance = Math.random();
-        if (chance > 0.3) { // 70% chance to run
+        if (chance > 0.3) {
+            // 70% chance to run
             const room = this.rooms[this.player.currentRoom];
             const exits = Object.keys(room.exits);
             if (exits.length > 0) {
-                const randomExit = exits[Math.floor(Math.random() * exits.length)];
+                const randomExit =
+                    exits[Math.floor(Math.random() * exits.length)];
                 this.printText("You successfully flee!");
                 this.movePlayer(randomExit);
             } else {
@@ -749,49 +846,55 @@ class Game {
 
     attackEnemy(enemy) {
         const room = this.rooms[this.player.currentRoom];
-        
+
         if (room.enemies.includes(enemy)) {
-            this.printText(`You attack the ${enemy}!`, 'combat-action');
-            
+            this.printText(`You attack the ${enemy}!`, "combat-action");
+
             const enemyTypes = {
-                "skeleton": "skeleton",
-                "goblin": "goblin",
-                "spider": "spider",
-                "guardian": "guardian"
+                skeleton: "skeleton",
+                goblin: "goblin",
+                spider: "spider",
+                guardian: "guardian"
             };
 
             // Calculate enemy position consistently for all types
-            const size = enemy === 'skeleton' ? 
-                this.canvas.height * 0.8 : 
-                this.canvas.height * 0.4;
-            
+            const size =
+                enemy === "skeleton"
+                    ? this.canvas.height * 0.8
+                    : this.canvas.height * 0.4;
+
             const centerX = (this.canvas.width - size) / 2;
-            const baseY = this.canvas.height - size - (this.canvas.height * 0.1);
-            
-            const enemyPos = { 
-                x: centerX, 
-                y: baseY, 
-                width: size, 
-                height: size 
+            const baseY = this.canvas.height - size - this.canvas.height * 0.1;
+
+            const enemyPos = {
+                x: centerX,
+                y: baseY,
+                width: size,
+                height: size
             };
 
             // Combat logic
             const playerDamage = Math.floor(Math.random() * 20) + 10;
             const enemyDamage = Math.floor(Math.random() * 15) + 5;
-            
+
             // Update enemy health
             this.enemyHealth[enemy].current -= playerDamage;
-            this.printText(`You hit the ${enemy} for ${playerDamage} damage!`, 'combat-result');
+            this.printText(
+                `You hit the ${enemy} for ${playerDamage} damage!`,
+                "combat-result"
+            );
             this.updateHealthDisplays();
 
             // Flash the screen red briefly
-            this.ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+            this.ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            
+
             if (this.enemyHealth[enemy].current <= 0) {
                 // Play death sound
                 this.sounds.death.currentTime = 0;
-                this.sounds.death.play().catch(e => console.log("Error playing sound:", e));
+                this.sounds.death
+                    .play()
+                    .catch((e) => console.log("Error playing sound:", e));
 
                 // Start death animation at enemy position
                 this.dyingElements.push({
@@ -806,10 +909,10 @@ class Game {
 
                 // Create defeat particles at enemy center
                 this.createParticles(
-                    enemyPos.x + enemyPos.width/2, 
-                    enemyPos.y + enemyPos.height/2, 
-                    '#f00',
-                    'defeat'
+                    enemyPos.x + enemyPos.width / 2,
+                    enemyPos.y + enemyPos.height / 2,
+                    "#f00",
+                    "defeat"
                 );
 
                 // Add fade-out animation
@@ -821,29 +924,34 @@ class Game {
                     height: enemyPos.height,
                     opacity: 1
                 });
-                
+
                 // Remove enemy from room
-                room.enemies = room.enemies.filter(e => e !== enemy);
+                room.enemies = room.enemies.filter((e) => e !== enemy);
                 if (room.pixelArt && room.pixelArt.elements) {
                     room.pixelArt.elements = room.pixelArt.elements.filter(
-                        element => element.type !== enemyTypes[enemy]
+                        (element) => element.type !== enemyTypes[enemy]
                     );
                 }
-                
-                this.printText(`You defeat the ${enemy}!`, 'enemy-defeat');
+
+                this.printText(`You defeat the ${enemy}!`, "enemy-defeat");
                 this.updateBattleUI();
             } else {
                 // Play hit sound
                 this.sounds.hit.currentTime = 0;
-                this.sounds.hit.play().catch(e => console.log("Error playing sound:", e));
+                this.sounds.hit
+                    .play()
+                    .catch((e) => console.log("Error playing sound:", e));
 
                 // Enemy counterattack
                 this.player.health -= enemyDamage;
-                this.printText(`The ${enemy} hits you for ${enemyDamage} damage!`, 'combat-result');
+                this.printText(
+                    `The ${enemy} hits you for ${enemyDamage} damage!`,
+                    "combat-result"
+                );
                 this.updateHealthDisplays();
-                
+
                 if (this.player.health <= 0) {
-                    this.printText("You have died! Game Over.", 'enemy-defeat');
+                    this.printText("You have died! Game Over.", "enemy-defeat");
                     return;
                 }
             }
@@ -853,7 +961,7 @@ class Game {
     }
 
     openChest(target) {
-        if (target !== 'chest') {
+        if (target !== "chest") {
             this.printText("What are you trying to open?");
             return;
         }
@@ -870,29 +978,36 @@ class Game {
         }
 
         if (room.enemies.length > 0) {
-            this.printText("You can't open the chest while enemies are present!");
+            this.printText(
+                "You can't open the chest while enemies are present!"
+            );
             return;
         }
 
         // Open the chest
         room.chestOpen = true;
         room.items.push(...room.chestContents);
-        
+
         // Create particles effect
-        const centerX = (this.canvas.width) / 2;
-        const bottomY = this.canvas.height - (this.canvas.height * 0.5);
-        this.createParticles(centerX, bottomY, '#ff0', 'collect');
+        const centerX = this.canvas.width / 2;
+        const bottomY = this.canvas.height - this.canvas.height * 0.5;
+        this.createParticles(centerX, bottomY, "#ff0", "collect");
 
         // Update the chest visual to show it's open
-        const chestElement = room.pixelArt.elements.find(element => element.type === 'chest');
+        const chestElement = room.pixelArt.elements.find(
+            (element) => element.type === "chest"
+        );
         if (chestElement) {
             chestElement.isOpen = true;
         }
 
-        this.printText("You open the chest.", 'room-info');
-        this.printText(`Inside you find: ${room.chestContents.join(", ")}`, 'room-info');
+        this.printText("You open the chest.", "room-info");
+        this.printText(
+            `Inside you find: ${room.chestContents.join(", ")}`,
+            "room-info"
+        );
     }
 }
 
 // Start the game
-const game = new Game(); 
+const game = new Game();
