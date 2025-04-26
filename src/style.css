@@ -1,96 +1,233 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html,
+body {
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    background-color: #000;
+    color: #0f0;
+    font-family: "Courier New", monospace;
+    padding: 10px;
+    line-height: 1.5;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#game-container {
+    width: 100%;
+    height: 100%;
+    border: 2px solid #0f0;
+    display: flex;
+    padding: 10px;
+    gap: 10px;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+#text-section {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #0f0;
+    padding: 5px;
+    min-height: 0; /* Allow shrinking */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
+#game-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0; /* Allow shrinking */
 }
 
-.card {
-  padding: 2em;
+#pixel-art-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #0f0;
+    background-color: #111;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    min-height: 0; /* Allow shrinking */
 }
 
-.read-the-docs {
-  color: #888;
+#pixel-art {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.battle-ui {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.health-display {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border: 4px solid #333;
+    border-radius: 10px;
+    padding: 10px;
+    color: #000;
+    font-family: monospace;
+    font-size: 16px;
+    min-width: 180px;
+}
+
+.enemy-health {
+    top: 10px;
+    right: 10px;
+}
+
+.player-health {
+    bottom: 10px;
+    left: 10px;
+}
+
+.health-bar {
+    width: 100%;
+    height: 12px;
+    background: #600;
+    margin-top: 5px;
+    border: 2px solid #000;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
+.enemy-health .health-bar-fill {
+    background: #f00;
+}
+
+.player-health .health-bar-fill {
+    background: #0f0;
+}
+
+.health-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+#game-text {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 5px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+    min-height: 0; /* Allow shrinking */
+}
+
+/* Add spacing between text groups */
+#game-text p {
+    margin: 0 0 12px 0; /* Add bottom margin to all paragraphs */
+    padding: 0;
+}
+
+#game-text p:last-child {
+    margin-bottom: 0; /* Remove margin from last paragraph */
+}
+
+/* Add extra spacing for section breaks */
+#game-text .room-description {
+    margin: 24px 0; /* Larger margin for room descriptions */
+    border-bottom: 1px solid rgba(0, 255, 0, 0.2); /* Subtle separator */
+    padding-bottom: 12px;
+}
+
+#game-text .room-description:first-child {
+    margin-top: 0; /* No top margin for first room description */
+}
+
+#game-text .room-info {
+    margin-bottom: 16px; /* More space after room information */
+}
+
+#game-text .combat-action {
+    margin: 20px 0 8px 0; /* Extra space before combat starts */
+    color: #0fa; /* Slightly different color for combat text */
+}
+
+#game-text .combat-result {
+    margin-bottom: 12px;
+    color: #ff0; /* Yellow for damage numbers */
+}
+
+#game-text .enemy-defeat {
+    margin: 20px 0; /* Extra space around victory messages */
+    color: #f0a; /* Pink for victory text */
+    font-weight: bold;
+}
+
+/* Add spacing after groups of related messages */
+#game-text .room-info + .room-info {
+    margin-top: -8px; /* Reduce space between consecutive room info messages */
+}
+
+#game-text .combat-result + .combat-result {
+    margin-top: -4px; /* Reduce space between consecutive combat results */
+}
+
+/* Add extra emphasis to important messages */
+#game-text .welcome-message {
+    font-size: 16px;
+    margin: 24px 0;
+    color: #0f0;
+    text-align: center;
+}
+
+#input-container {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    border-top: 1px solid #0f0;
+}
+
+#command-input {
+    background-color: #000;
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 5px;
+    flex-grow: 1;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+}
+
+#command-input:focus {
+    outline: none;
+}
+
+.prompt {
+    color: #0f0;
+    font-size: 14px;
+}
+
+/* Custom scrollbar for the game text */
+#game-text::-webkit-scrollbar {
+    width: 8px;
+}
+
+#game-text::-webkit-scrollbar-track {
+    background: #000;
+}
+
+#game-text::-webkit-scrollbar-thumb {
+    background: #0f0;
+    border-radius: 4px;
 }
