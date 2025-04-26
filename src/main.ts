@@ -1,5 +1,5 @@
 import "./style.css";
-import Game from "../old/game.js";
+import Game from "./game.ts";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div id="game-container">
