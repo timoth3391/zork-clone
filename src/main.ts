@@ -45,4 +45,5 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
   `;
 
+// Start game
 const game = new Game();

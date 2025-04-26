@@ -1,4 +1,4 @@
-class Game {
+export default class Game {
     constructor() {
         this.rooms = {
             entrance: {
@@ -1008,6 +1008,3 @@ class Game {
         );
     }
 }
-
-// Start the game
-const game = new Game();
