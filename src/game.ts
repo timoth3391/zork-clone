@@ -1,6 +1,10 @@
 import { getRooms } from "../src/world/rooms";
 
+import { Room } from "./lib/types";
+
 export default class Game {
+    rooms: { [roomName: string]: Room };
+
     constructor() {
         this.rooms = getRooms();
 
