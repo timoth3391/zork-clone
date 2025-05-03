@@ -1,18 +1,13 @@
 import { rooms } from "../src/world/rooms";
+import Player, { PlayerType } from "./entities/Player";
 
 export default class Game {
     rooms: typeof rooms;
+    player: PlayerType;
 
     constructor() {
-        this.player = {
-            currentRoom: "entrance",
-            inventory: [],
-            health: 100,
-            hasKey: false,
-            previousRoom: null // Track the previous room
-        };
-
         this.rooms = rooms;
+        this.player = new Player({ currentRoom: "entrance " });
         this.gameText = document.getElementById("game-text");
         this.commandInput = document.getElementById("command-input");
         this.canvas = document.getElementById("pixel-art");
