@@ -17,11 +17,3 @@ export type PixelArt = {
     background: string;
     elements: PixelElement[];
 };
-
-export type Room = {
-    description: string;
-    exits: ExitMap;
-    items: string[];
-    enemies: string[];
-    pixelArt?: PixelArt;
-};
