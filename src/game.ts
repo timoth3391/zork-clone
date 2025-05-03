@@ -1,13 +1,9 @@
-import { getRooms } from "../src/world/rooms";
-
-import { Room } from "./lib/types";
+import { rooms } from "../src/world/rooms";
 
 export default class Game {
-    rooms: { [roomName: string]: Room };
+    rooms: typeof rooms;
 
     constructor() {
-        this.rooms = getRooms();
-
         this.player = {
             currentRoom: "entrance",
             inventory: [],
@@ -16,6 +12,7 @@ export default class Game {
             previousRoom: null // Track the previous room
         };
 
+        this.rooms = rooms;
         this.gameText = document.getElementById("game-text");
         this.commandInput = document.getElementById("command-input");
         this.canvas = document.getElementById("pixel-art");
