@@ -9,6 +9,9 @@ export default class Game {
     canvas: HTMLCanvasElement | null;
     ctx: CanvasRenderingContext2D | null;
     backgrounds: Record<string, HTMLImageElement>;
+    particles: [];
+    fadeOutElements: [];
+    dyingElements: [];
 
     constructor() {
         this.rooms = rooms;
