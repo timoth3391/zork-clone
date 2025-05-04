@@ -1,4 +1,4 @@
-import { rooms } from "../src/world/rooms";
+import { RoomName, rooms } from "../src/world/rooms";
 import Player, { PlayerType } from "./entities/Player";
 
 export default class Game {
@@ -8,10 +8,11 @@ export default class Game {
     commandInput: HTMLElement | null;
     canvas: HTMLCanvasElement | null;
     ctx: CanvasRenderingContext2D | null;
+    backgrounds: Record<string, HTMLImageElement>;
 
     constructor() {
         this.rooms = rooms;
-        this.player = new Player({ currentRoom: "entrance " });
+        this.player = new Player({ currentRoom: "entrance" });
         this.gameText = document.getElementById("game-text");
         this.commandInput = document.getElementById("command-input");
 
@@ -32,6 +33,8 @@ export default class Game {
         window.addEventListener("resize", () => this.resizeCanvas());
 
         // Load background images
+        // TODO: Change room names and room image names to match
+        //       e.g. entryway --> entrance
         this.backgrounds = {
             entryway: new Image(),
             hallway: new Image()
