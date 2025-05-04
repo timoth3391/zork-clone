@@ -4,13 +4,27 @@ import Player, { PlayerType } from "./entities/Player";
 export default class Game {
     rooms: typeof rooms;
     player: PlayerType;
+    gameText: HTMLElement | null;
+    commandInput: HTMLElement | null;
+    canvas: HTMLCanvasElement | null;
+    ctx: CanvasRenderingContext2D | null;
 
     constructor() {
         this.rooms = rooms;
         this.player = new Player({ currentRoom: "entrance " });
         this.gameText = document.getElementById("game-text");
         this.commandInput = document.getElementById("command-input");
-        this.canvas = document.getElementById("pixel-art");
+
+        // Set canvas
+        const canvasEl = document.getElementById("pixel-art");
+
+        if (!(canvasEl instanceof HTMLCanvasElement)) {
+            throw new Error(
+                "Canvas element not found or is not a <canvas> element."
+            );
+        }
+
+        this.canvas = canvasEl;
         this.ctx = this.canvas.getContext("2d");
 
         // Set up canvas sizing
@@ -387,7 +401,7 @@ export default class Game {
         this.printRoomDescription();
     }
 
-    printText(text, className = "") {
+    printText(text: string, className = "") {
         const p = document.createElement("p");
         p.textContent = text;
         if (className) {
