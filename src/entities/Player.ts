@@ -1,4 +1,3 @@
-import { Room } from "../lib/types";
 import { RoomName } from "../world/rooms";
 
 export type PlayerType = InstanceType<typeof Player>;
