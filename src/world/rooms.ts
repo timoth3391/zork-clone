@@ -153,6 +153,6 @@ const rooms = {
     }
 } as const;
 
-type RoomName = keyof typeof room;
+export type RoomName = keyof typeof rooms;
 
-export { rooms, RoomName };
+export { rooms };
