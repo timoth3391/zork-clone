@@ -2,20 +2,6 @@
 
 import HealthDisplay from "../../ui/HealthDisplay/HealthDisplay";
 
-/* const ENEMY_HEALTH = {
-    skeleton: { max: 50, current: 50 },
-    goblin: { max: 40, current: 40 },
-    spider: { max: 30, current: 30 },
-    guardian: { max: 100, current: 100 }
-}; */
-
-/* const ENEMY_IMAGES = {
-    skeleton: "assets/skeleton.PNG",
-    goblin: "assets/goblin.PNG",
-    bandit: "assets/bandit.PNG",
-    blob: "assets/blob.PNG"
-}; */
-
 const ENEMIES = {
     skeleton: {
         health: {
