@@ -31,12 +31,12 @@ const ENEMIES = {
         },
         image: "assets/goblin.PNG"
     },
-    spider: {
+    bandit: {
         health: {
-            max: 30,
-            current: 30
+            max: 70,
+            current: 70
         },
-        image: "assets/spider.PNG"
+        image: "assets/bandit.PNG"
     },
     guardian: {
         health: {
