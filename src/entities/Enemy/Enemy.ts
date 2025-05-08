@@ -62,7 +62,7 @@ export default class Enemy {
         });
     }
 
-    draw(canvas, ctx) {
+    draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
         const size = canvas.height * 0.8;
         const centerX = (canvas.width - size) / 2;
         const baseY = canvas.height - size - canvas.height * 0.1; // 10% padding from bottom
