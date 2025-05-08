@@ -1,4 +1,4 @@
-import { RoomName, rooms } from "../src/world/rooms";
+import { rooms } from "../src/world/rooms";
 import Enemy, { EnemyNames } from "./entities/Enemy/Enemy";
 import Player, { PlayerType } from "./entities/Player/Player";
 
@@ -58,14 +58,6 @@ export default class Game {
 
         // this.enemy = null;
         this.enemies = [];
-
-        // Get UI elements
-        this.enemyHealthDisplay = document.querySelector(".enemy-health");
-        this.playerHealthDisplay = document.querySelector(".player-health");
-
-        // Hide health displays initially
-        this.enemyHealthDisplay.style.display = "none";
-        this.playerHealthDisplay.style.display = "none";
 
         // Load item images
         this.itemImages = {
@@ -626,9 +618,6 @@ export default class Game {
     updateBattleUI() {
         const room = this.rooms[this.player.currentRoom];
         const hasEnemies = room.enemies.length > 0;
-
-        this.enemyHealthDisplay.style.display = hasEnemies ? "block" : "none";
-        this.playerHealthDisplay.style.display = hasEnemies ? "block" : "none";
 
         if (hasEnemies) {
             this.enemies[0].healthDisplay.show();
