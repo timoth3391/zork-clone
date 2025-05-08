@@ -56,13 +56,6 @@ export default class Game {
         this.lastTime = 0;
         this.requestAnimationFrame();
 
-        // Initialize enemy health
-        this.enemyHealth = {
-            skeleton: { max: 50, current: 50 },
-            goblin: { max: 40, current: 40 },
-            spider: { max: 30, current: 30 },
-            guardian: { max: 100, current: 100 }
-        };
         // this.enemy = null;
         this.enemies = [];
 
@@ -73,19 +66,6 @@ export default class Game {
         // Hide health displays initially
         this.enemyHealthDisplay.style.display = "none";
         this.playerHealthDisplay.style.display = "none";
-
-        // Load enemy images
-        this.enemyImages = {
-            skeleton: new Image(),
-            goblin: new Image(),
-            bandit: new Image(),
-            blob: new Image()
-        };
-
-        this.enemyImages.skeleton.src = "assets/skeleton.PNG";
-        this.enemyImages.goblin.src = "assets/goblin.PNG";
-        this.enemyImages.bandit.src = "assets/bandit.PNG";
-        this.enemyImages.blob.src = "assets/blob.PNG";
 
         // Load item images
         this.itemImages = {
@@ -265,17 +245,7 @@ export default class Game {
                 }
             });
 
-            // Draw enemies last and larger
-            /* room.pixelArt.elements.forEach((element) => {
-                if (
-                    ["skeleton", "goblin", "bandit", "blob"].includes(
-                        element.type
-                    )
-                ) {
-                    this.drawEnemy(element.type, 0, 0); // x,y ignored now as positioning is handled in drawEnemy
-                }
-            }); */
-
+            // Draw enemies last
             if (this.enemies.length) {
                 // NOTE: Only drawing ONE enemy for now
                 this.enemies[0].draw(this.canvas, this.ctx);
@@ -339,21 +309,6 @@ export default class Game {
 
             this.ctx.restore();
         });
-    }
-
-    drawEnemy(type, x, y) {
-        const image = this.enemyImages[type];
-        if (image.complete) {
-            // All enemies are now positioned like the skeleton
-            const size =
-                type === "skeleton"
-                    ? this.canvas.height * 0.8 // Skeleton remains larger
-                    : this.canvas.height * 0.4; // Other enemies at 40%
-
-            const centerX = (this.canvas.width - size) / 2;
-            const baseY = this.canvas.height - size - this.canvas.height * 0.1; // 10% padding from bottom
-            this.ctx.drawImage(image, centerX, baseY, size, size);
-        }
     }
 
     drawPixelShape(shape, x, y, size = 1) {
@@ -666,23 +621,6 @@ export default class Game {
             `HP: ${this.player.health}/100`;
         this.playerHealthDisplay.querySelector(".health-bar-fill").style.width =
             `${playerHealthPercent}%`;
-
-        // Update enemy health if in combat
-        const currentRoom = this.rooms[this.player.currentRoom];
-        if (currentRoom.enemies.length > 0) {
-            const enemy = currentRoom.enemies[0];
-            const enemyHealth = this.enemyHealth[enemy];
-            const enemyHealthPercent =
-                (enemyHealth.current / enemyHealth.max) * 100;
-
-            this.enemyHealthDisplay.querySelector(".name").textContent =
-                enemy.toUpperCase();
-            this.enemyHealthDisplay.querySelector(".hp").textContent =
-                `HP: ${enemyHealth.current}/${enemyHealth.max}`;
-            this.enemyHealthDisplay.querySelector(
-                ".health-bar-fill"
-            ).style.width = `${enemyHealthPercent}%`;
-        }
     }
 
     updateBattleUI() {
