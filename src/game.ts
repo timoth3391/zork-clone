@@ -42,8 +42,8 @@ export default class Game {
             entryway: new Image(),
             hallway: new Image()
         };
-        this.backgrounds.entryway.src = "assets/entryway.PNG";
-        this.backgrounds.hallway.src = "assets/hallway.PNG";
+        this.backgrounds.entryway.src = "entryway.PNG";
+        this.backgrounds.hallway.src = "hallway.PNG";
 
         this.particles = [];
         this.fadeOutElements = [];
