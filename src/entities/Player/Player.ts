@@ -1,3 +1,4 @@
+import HealthDisplay from "../../ui/HealthDisplay/HealthDisplay";
 import { RoomName } from "../world/rooms";
 
 export type PlayerType = InstanceType<typeof Player>;
@@ -17,5 +18,12 @@ export default class Player implements PlayerType {
         this.health = INITIAL_PLAYER_HEALTH;
         this.hasKey = false;
         this.previousRoom = null;
+
+        this.healthDisplay = new HealthDisplay({
+            type: "player",
+            name: "Player",
+            currentHp: this.health,
+            maxHp: INITIAL_PLAYER_HEALTH
+        });
     }
 }
