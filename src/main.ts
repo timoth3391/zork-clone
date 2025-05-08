@@ -14,31 +14,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
         <div id="game-content">
                 <div id="pixel-art-container">
                     <canvas id="pixel-art"></canvas>
-                    <div class="battle-ui">
-                        <div class="health-display enemy-health">
-                            <div class="health-text">
-                                <span class="name">ENEMY</span>
-                                <span class="hp">HP: 50/50</span>
-                            </div>
-                            <div class="health-bar">
-                                <div
-                                    class="health-bar-fill"
-                                    style="width: 100%"
-                                ></div>
-                            </div>
-                        </div>
-                        <div class="health-display player-health">
-                            <div class="health-text">
-                                <span class="name">PLAYER</span>
-                                <span class="hp">HP: 100/100</span>
-                            </div>
-                            <div class="health-bar">
-                                <div
-                                    class="health-bar-fill"
-                                    style="width: 100%"
-                                ></div>
-                        </div>
-                    </div>
+                    <div class="battle-ui"></div>
                 </div>
             </div>
         </div>

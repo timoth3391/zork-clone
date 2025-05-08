@@ -1,4 +1,4 @@
-.health-display {
+.healthDisplay {
     position: absolute;
     background: rgba(255, 255, 255, 0.9);
     border: 4px solid #333;
@@ -8,4 +8,43 @@
     font-family: monospace;
     font-size: 16px;
     min-width: 180px;
+}
+
+.healthBar {
+    width: 100%;
+    height: 12px;
+    background: #600;
+    margin-top: 5px;
+    border: 2px solid #000;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.enemyHealth {
+    top: 10px;
+    right: 10px;
+}
+
+.playerHealth {
+    bottom: 10px;
+    left: 10px;
+}
+
+.healthText {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.healthBarFill {
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
+.enemyHealth .healthBarFill {
+    background: #f00;
+}
+
+.playerHealth .healthBarFill {
+    background: #0f0;
 }

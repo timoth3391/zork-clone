@@ -631,8 +631,14 @@ export default class Game {
         this.playerHealthDisplay.style.display = hasEnemies ? "block" : "none";
 
         if (hasEnemies) {
-            this.updateHealthDisplays();
+            this.enemies[0].healthDisplay.show();
+            this.player.healthDisplay.show();
         }
+
+        // NOTE: Disabled temporarily until I figure out if its needed here
+        /* if (hasEnemies) {
+            this.updateHealthDisplays();
+        } */
     }
 
     attemptRun() {

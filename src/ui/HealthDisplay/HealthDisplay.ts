@@ -5,7 +5,7 @@ type HealthBarType = "player" | "enemy";
 
 type HealthDisplayParams = {
     type: HealthBarType;
-    name: EnemyNames;
+    name: EnemyNames | string;
     currentHp: number;
     maxHp: number;
 };
@@ -13,7 +13,7 @@ type HealthDisplayParams = {
 export default class HealthDisplay {
     container: HTMLDivElement;
     type: HealthBarType;
-    name: EnemyNames;
+    name: EnemyNames | string;
     currentHp: number;
     maxHp: number;
 
@@ -28,21 +28,32 @@ export default class HealthDisplay {
 
     initializeHealthDisplay() {
         const container = document.createElement("div");
-        container.classList.add(styles.healthDisplay, styles.enemyHealth);
+        const containerStyles = [styles.healthDisplay];
+        containerStyles.push(styles[`${this.type}Health`]);
+
+        container.classList.add(...containerStyles);
 
         container.innerHTML = `
-            <div class="health-text">
+            <div class=${styles.healthText}>
                 <span class="name">${this.name.toUpperCase()}</span>
                 <span class="hp">HP: ${this.currentHp}/${this.maxHp}</span>
             </div>
-            <div class="health-bar">
-                <div class="health-bar-fill" style="width: 100%"></div>
+            <div class=${styles.healthBar}>
+                <div class=${styles.healthBarFill} style="width: 100%"></div>
             </div>
         `;
 
         container.style.display = "none";
-        document.querySelector(".battle-ui");
+        document.querySelector(".battle-ui")?.appendChild(container);
 
         return container;
+    }
+
+    hide() {
+        this.container.style.display = "none";
+    }
+
+    show() {
+        this.container.style.display = "block";
     }
 }
