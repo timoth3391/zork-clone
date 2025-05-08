@@ -8,28 +8,28 @@ const ENEMIES = {
             max: 50,
             current: 50
         },
-        image: "assets/skeleton.PNG"
+        imagePath: "skeleton.PNG"
     },
     goblin: {
         health: {
             max: 40,
             current: 40
         },
-        image: "assets/goblin.PNG"
+        imagePath: "goblin.PNG"
     },
     bandit: {
         health: {
             max: 70,
             current: 70
         },
-        image: "assets/bandit.PNG"
+        imagePath: "bandit.PNG"
     },
     guardian: {
         health: {
             max: 100,
             current: 100
         },
-        image: "assets/blob.PNG"
+        imagePath: "blob.PNG"
     }
 } as const;
 
