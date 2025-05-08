@@ -1,4 +1,5 @@
 import { RoomName, rooms } from "../src/world/rooms";
+import Enemy, { EnemyNames } from "./entities/Enemy/Enemy";
 import Player, { PlayerType } from "./entities/Player";
 
 export default class Game {
@@ -12,6 +13,8 @@ export default class Game {
     particles: [];
     fadeOutElements: [];
     dyingElements: [];
+    // enemy: Enemy | null;
+    enemies: Enemy[];
 
     constructor() {
         this.rooms = rooms;
@@ -60,6 +63,8 @@ export default class Game {
             spider: { max: 30, current: 30 },
             guardian: { max: 100, current: 100 }
         };
+        // this.enemy = null;
+        this.enemies = [];
 
         // Get UI elements
         this.enemyHealthDisplay = document.querySelector(".enemy-health");
@@ -261,7 +266,7 @@ export default class Game {
             });
 
             // Draw enemies last and larger
-            room.pixelArt.elements.forEach((element) => {
+            /* room.pixelArt.elements.forEach((element) => {
                 if (
                     ["skeleton", "goblin", "bandit", "blob"].includes(
                         element.type
@@ -269,7 +274,12 @@ export default class Game {
                 ) {
                     this.drawEnemy(element.type, 0, 0); // x,y ignored now as positioning is handled in drawEnemy
                 }
-            });
+            }); */
+
+            if (this.enemies.length) {
+                // NOTE: Only drawing ONE enemy for now
+                this.enemies[0].draw(this.canvas, this.ctx);
+            }
         }
 
         // Draw particles
@@ -528,8 +538,11 @@ export default class Game {
 
             // Reset health of enemies in the new room
             const newRoomEnemies = this.rooms[newRoom].enemies;
-            newRoomEnemies.forEach((enemy) => {
-                this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
+
+            newRoomEnemies.forEach((enemyName: EnemyNames) => {
+                // this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
+                const enemyInstance = new Enemy({ name: enemyName });
+                this.enemies.push(enemyInstance);
             });
 
             if (this.rooms[newRoom].trap) {

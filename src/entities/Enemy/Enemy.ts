@@ -43,6 +43,7 @@ export default class Enemy {
     health: number;
     maxHealth: number;
     healthDisplay: HealthDisplay;
+    image: HTMLImageElement;
 
     constructor({ name }: EnemyParams) {
         const enemyData = ENEMIES[name];
@@ -50,6 +51,8 @@ export default class Enemy {
         this.name = name;
         this.health = enemyData.health.current;
         this.maxHealth = enemyData.health.max;
+        this.image = new Image();
+        this.image.src = enemyData.imagePath;
 
         this.healthDisplay = new HealthDisplay({
             type: "enemy",
@@ -57,5 +60,13 @@ export default class Enemy {
             currentHp: this.health,
             maxHp: this.maxHealth
         });
+    }
+
+    draw(canvas, ctx) {
+        const size = canvas.height * 0.8;
+        const centerX = (canvas.width - size) / 2;
+        const baseY = canvas.height - size - canvas.height * 0.1; // 10% padding from bottom
+
+        ctx.drawImage(this.image, centerX, baseY, size, size);
     }
 }
