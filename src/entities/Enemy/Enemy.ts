@@ -40,22 +40,22 @@ type EnemyParams = {
 
 export default class Enemy {
     name: EnemyNames;
-    hp: number;
-    maxHp: number;
+    health: number;
+    maxHealth: number;
     healthDisplay: HealthDisplay;
 
     constructor({ name }: EnemyParams) {
         const enemyData = ENEMIES[name];
 
         this.name = name;
-        this.hp = enemyData.health.current;
-        this.maxHp = enemyData.health.max;
+        this.health = enemyData.health.current;
+        this.maxHealth = enemyData.health.max;
 
         this.healthDisplay = new HealthDisplay({
             type: "enemy",
             name: this.name,
-            currentHp: this.hp,
-            maxHp: this.maxHp
+            currentHp: this.health,
+            maxHp: this.maxHealth
         });
     }
 }
