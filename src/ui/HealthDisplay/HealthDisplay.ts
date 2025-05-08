@@ -18,11 +18,12 @@ export default class HealthDisplay {
     maxHp: number;
 
     constructor({ type, name, currentHp, maxHp }: HealthDisplayParams) {
-        this.container = this.initializeHealthDisplay();
         this.type = type;
         this.name = name;
         this.currentHp = currentHp;
         this.maxHp = maxHp;
+
+        this.container = this.initializeHealthDisplay();
     }
 
     initializeHealthDisplay() {
