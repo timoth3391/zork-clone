@@ -1,6 +1,6 @@
 import { RoomName, rooms } from "../src/world/rooms";
 import Enemy, { EnemyNames } from "./entities/Enemy/Enemy";
-import Player, { PlayerType } from "./entities/Player";
+import Player, { PlayerType } from "./entities/Player/Player";
 
 export default class Game {
     rooms: typeof rooms;
