@@ -505,19 +505,15 @@ export default class Game {
             const newRoomEnemies = this.rooms[newRoom].enemies;
             const previousRoomEnemies = this.enemies;
 
-            // If new room has NO enemies
-            if (!newRoomEnemies.length) {
-                if (previousRoomEnemies.length) {
-                    // The previous room had an enemy, remove it and its health display
-                    this.removeEnemy();
-                    this.player.healthDisplay.hide();
-                }
-            } else {
-                if (previousRoomEnemies.length) {
-                    this.removeEnemy();
-                }
+            /**
+             * NOTE: Next room will either have NO enemies,
+             *       or you will have to replace the 'current'
+             *       enemy with the new one.
+             */
 
-                // Set new room enemy as 'active'
+            if (previousRoomEnemies.length) this.removeEnemy();
+
+            if (newRoomEnemies.length) {
                 this.enemies = newRoomEnemies.map((enemyName: EnemyNames) => {
                     const enemyInstance = new Enemy({
                         name: enemyName
