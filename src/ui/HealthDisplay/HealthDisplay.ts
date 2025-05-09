@@ -67,4 +67,12 @@ export default class HealthDisplay {
     show() {
         this.container.style.display = "block";
     }
+
+    /**
+     * Remove container element and it's children from tree.
+     * Used when removing an enemy from the scene.
+     */
+    remove() {
+        this.container.remove();
+    }
 }
