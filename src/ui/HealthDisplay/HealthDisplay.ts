@@ -26,6 +26,11 @@ export default class HealthDisplay {
         this.container = this.initializeHealthDisplay();
     }
 
+    /**
+     * Initializes the HTML structure for the health display.
+     *
+     * @returns {HTMLDivElement} - The container element for the health display.
+     */
     initializeHealthDisplay() {
         const container = document.createElement("div");
         const containerStyles = [styles.healthDisplay];
@@ -49,10 +54,16 @@ export default class HealthDisplay {
         return container;
     }
 
+    /**
+     * Hides the health display container.
+     */
     hide() {
         this.container.style.display = "none";
     }
 
+    /**
+     * Shows the health display container.
+     */
     show() {
         this.container.style.display = "block";
     }

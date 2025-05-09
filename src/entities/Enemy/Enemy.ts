@@ -62,6 +62,8 @@ export default class Enemy {
         });
     }
 
+    /**
+     * Draws the enemy image onto the provided canvas using the specified context*/
     draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
         const size = canvas.height * 0.8;
         const centerX = (canvas.width - size) / 2;
