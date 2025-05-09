@@ -1,5 +1,5 @@
 import HealthDisplay from "../../ui/HealthDisplay/HealthDisplay";
-import { RoomName } from "../world/rooms";
+import { RoomName } from "../../world/rooms";
 
 export type PlayerType = InstanceType<typeof Player>;
 
@@ -11,6 +11,7 @@ export default class Player implements PlayerType {
     health: number;
     hasKey: boolean;
     previousRoom: RoomName | null;
+    healthDisplay: HealthDisplay;
 
     constructor({ currentRoom }: { currentRoom: RoomName }) {
         this.currentRoom = currentRoom;
