@@ -482,6 +482,7 @@ export default class Game {
 
     movePlayer(direction) {
         const room = this.rooms[this.player.currentRoom];
+        const moveIsValid = room.exits[direction];
 
         // If new room has NO enemies
         //      If there is a currently ACTIVE enemy (this.enemies.length)
@@ -495,13 +496,12 @@ export default class Game {
         //          Replace enemy with the new enemy
         //      Show enemy and player health displays
 
-        if (room.exits[direction]) {
+        if (moveIsValid) {
             const newRoom = room.exits[direction];
 
             // Store current room before moving
             this.player.previousRoom = this.player.currentRoom;
 
-            // Reset health of enemies in the new room
             const newRoomEnemies = this.rooms[newRoom].enemies;
             const previousRoomEnemies = this.enemies;
 
@@ -526,14 +526,7 @@ export default class Game {
                 });
             }
 
-            /* if (newRoomEnemies.length) {
-                newRoomEnemies.forEach((enemyName: EnemyNames) => {
-                    // this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
-                    const enemyInstance = new Enemy({ name: enemyName });
-                    this.enemies.push(enemyInstance);
-                }); 
-            } */
-
+            // Activate traps
             if (this.rooms[newRoom].trap) {
                 this.player.health -= 20;
                 this.printText("You triggered a trap! You take 20 damage.");
