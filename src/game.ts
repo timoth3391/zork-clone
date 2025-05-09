@@ -622,6 +622,9 @@ export default class Game {
         if (hasEnemies) {
             this.enemies[0].healthDisplay.show();
             this.player.healthDisplay.show();
+        } else {
+            this.enemies[0].healthDisplay.hide();
+            this.player.healthDisplay.hide();
         }
 
         // NOTE: Disabled temporarily until I figure out if its needed here
