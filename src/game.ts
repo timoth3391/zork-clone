@@ -474,8 +474,26 @@ export default class Game {
         this.updateBattleUI();
     }
 
+    removeEnemy() {
+        const currentEnemy = this.enemies[0];
+        currentEnemy.healthDisplay.remove();
+        this.enemies = [];
+    }
+
     movePlayer(direction) {
         const room = this.rooms[this.player.currentRoom];
+
+        // If new room has NO enemies
+        //      If there is a currently ACTIVE enemy (this.enemies.length)
+        //          Remove enemy's HealthDisplay HTML
+        //          Hide player health display
+        //          Remove instance of enemy (this.enemies = [])
+        //      Else there is no ACTIVE enemy
+        //          Do NOTHING (this.enemies is already empty)
+        // Else new room has an enemy
+        //      If there is a currently ACTIVE enemy (from the previous room)
+        //          Replace enemy with the new enemy
+        //      Show enemy and player health displays
 
         if (room.exits[direction]) {
             const newRoom = room.exits[direction];
@@ -485,12 +503,36 @@ export default class Game {
 
             // Reset health of enemies in the new room
             const newRoomEnemies = this.rooms[newRoom].enemies;
+            const previousRoomEnemies = this.enemies;
 
-            newRoomEnemies.forEach((enemyName: EnemyNames) => {
-                // this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
-                const enemyInstance = new Enemy({ name: enemyName });
-                this.enemies.push(enemyInstance);
-            });
+            // If new room has NO enemies
+            if (!newRoomEnemies.length) {
+                if (previousRoomEnemies.length) {
+                    // The previous room had an enemy, remove it and its health display
+                    this.removeEnemy();
+                    this.player.healthDisplay.hide();
+                }
+            } else {
+                if (previousRoomEnemies.length) {
+                    this.removeEnemy();
+                }
+
+                // Set new room enemy as 'active'
+                this.enemies = newRoomEnemies.map((enemyName: EnemyNames) => {
+                    const enemyInstance = new Enemy({
+                        name: enemyName
+                    });
+                    return enemyInstance;
+                });
+            }
+
+            /* if (newRoomEnemies.length) {
+                newRoomEnemies.forEach((enemyName: EnemyNames) => {
+                    // this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
+                    const enemyInstance = new Enemy({ name: enemyName });
+                    this.enemies.push(enemyInstance);
+                }); 
+            } */
 
             if (this.rooms[newRoom].trap) {
                 this.player.health -= 20;
@@ -615,15 +657,18 @@ export default class Game {
             `${playerHealthPercent}%`;
     }
 
+    /**
+     * Updates enemy and player health displays.
+     */
     updateBattleUI() {
         const room = this.rooms[this.player.currentRoom];
-        const hasEnemies = room.enemies.length > 0;
+        const hasEnemies = this.enemies.length;
 
         if (hasEnemies) {
             this.enemies[0].healthDisplay.show();
             this.player.healthDisplay.show();
         } else {
-            this.enemies[0].healthDisplay.hide();
+            // NOTE: Enemy's health bar is removed by the removeEnemy method
             this.player.healthDisplay.hide();
         }
 
