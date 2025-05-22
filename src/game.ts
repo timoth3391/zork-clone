@@ -1,8 +1,14 @@
 import { rooms } from "../src/world/rooms";
 import Enemy, { EnemyNames } from "./entities/Enemy/Enemy";
 import Player, { PlayerType } from "./entities/Player/Player";
+import HealthDisplay from "./ui/HealthDisplay/HealthDisplay";
+
+export type GameContext = {
+    registerHealthDisplay: (display: HealthDisplay) => void;
+};
 
 export default class Game {
+    context: GameContext;
     rooms: typeof rooms;
     player: PlayerType;
     gameText: HTMLElement | null;
@@ -13,10 +19,15 @@ export default class Game {
     particles: [];
     fadeOutElements: [];
     dyingElements: [];
+    lastTime: number;
     // enemy: Enemy | null;
     enemies: Enemy[];
+    enemyHealthDisplays: HealthDisplay[];
 
     constructor() {
+        this.context = {
+            registerHealthDisplay: this.registerHealthDisplay.bind(this)
+        };
         this.rooms = rooms;
         this.player = new Player({ currentRoom: "entrance" });
         this.gameText = document.getElementById("game-text");
@@ -58,6 +69,7 @@ export default class Game {
 
         // this.enemy = null;
         this.enemies = [];
+        this.enemyHealthDisplays = [];
 
         // Load item images
         this.itemImages = {
@@ -72,6 +84,10 @@ export default class Game {
             death: new Audio("assets/death.wav"),
             hit: new Audio("assets/hit.wav")
         };
+    }
+
+    registerHealthDisplay(display: HealthDisplay) {
+        this.enemyHealthDisplays.push(display);
     }
 
     resizeCanvas() {
@@ -445,6 +461,7 @@ export default class Game {
         }
     }
 
+    // TODO: Refactor to use movePlayer method!
     goBack() {
         if (!this.player.previousRoom) {
             this.printText("You can't go back from here.");
@@ -465,19 +482,22 @@ export default class Game {
         this.renderPixelArt();
 
         // Reset enemy health in the room we're entering
-        const roomEnemies = this.rooms[this.player.currentRoom].enemies;
+        /* const roomEnemies = this.rooms[this.player.currentRoom].enemies;
         roomEnemies.forEach((enemy) => {
             this.enemyHealth[enemy].current = this.enemyHealth[enemy].max;
-        });
+        }); */
 
-        // Update battle UI
+        // Show/hide battle UI based on enemies present
         this.updateBattleUI();
     }
 
     removeEnemy() {
-        const currentEnemy = this.enemies[0];
-        currentEnemy.healthDisplay.remove();
+        // const currentEnemy = this.enemies[0];
+        // currentEnemy.healthDisplay.remove();
+
+        // Clear all enemies and their health displays
         this.enemies = [];
+        this.enemyHealthDisplays.forEach((display) => display.remove());
     }
 
     movePlayer(direction) {
@@ -516,6 +536,7 @@ export default class Game {
             if (newRoomEnemies.length) {
                 this.enemies = newRoomEnemies.map((enemyName: EnemyNames) => {
                     const enemyInstance = new Enemy({
+                        gameContext: this.context,
                         name: enemyName
                     });
                     return enemyInstance;
