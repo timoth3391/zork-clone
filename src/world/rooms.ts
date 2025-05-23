@@ -14,15 +14,17 @@ type Rooms = {
         };
         isExit?: boolean;
         isTrap?: boolean;
+        chestContents?: string[];
+        chestOpen?: boolean;
     };
 };
 
-type RoomElement = {
+export type RoomElement = {
     type: string;
     x: number;
     y: number;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     color?: string;
 };
 
@@ -91,7 +93,7 @@ const rooms: Rooms = {
             "A winding corridor with several alcoves. The air is thick with dust. You see scratch marks on the walls.",
         exits: { south: "hall", east: "exit" },
         items: ["key"],
-        enemies: ["spider"],
+        enemies: ["bandit"],
         pixelArt: {
             background: "#111",
             elements: [
@@ -148,7 +150,7 @@ const rooms: Rooms = {
         exits: { west: "hall" },
         items: [],
         enemies: [],
-        trap: true,
+        isTrap: true,
         pixelArt: {
             background: "#111",
             elements: [

@@ -1,4 +1,4 @@
-import { rooms } from "../src/world/rooms";
+import { RoomElement, rooms } from "../src/world/rooms";
 import Enemy, { EnemyNames } from "./entities/Enemy/Enemy";
 import Player, { PlayerType } from "./entities/Player/Player";
 import HealthDisplay from "./ui/HealthDisplay/HealthDisplay";
@@ -28,6 +28,8 @@ type Particle = {
     opacity: number;
 };
 
+type FadeOutElement = RoomElement & { opacity: number };
+
 export default class Game {
     context: GameContext;
     rooms: typeof rooms;
@@ -38,7 +40,7 @@ export default class Game {
     ctx: CanvasRenderingContext2D | null;
     backgrounds: Record<string, HTMLImageElement>;
     particles: Particle[];
-    fadeOutElements: [];
+    fadeOutElements: FadeOutElement[];
     dyingElements: [];
     lastTime: number;
     // enemy: Enemy | null;
@@ -150,7 +152,7 @@ export default class Game {
         });
     }
 
-    updateFadeOuts(deltaTime) {
+    updateFadeOuts(deltaTime: number) {
         // Update fade-out animations
         this.fadeOutElements = this.fadeOutElements.filter((element) => {
             element.opacity -= deltaTime * 0.003;
@@ -542,18 +544,6 @@ export default class Game {
         const room = this.rooms[this.player.currentRoom];
         const moveIsValid = room.exits[direction];
 
-        // If new room has NO enemies
-        //      If there is a currently ACTIVE enemy (this.enemies.length)
-        //          Remove enemy's HealthDisplay HTML
-        //          Hide player health display
-        //          Remove instance of enemy (this.enemies = [])
-        //      Else there is no ACTIVE enemy
-        //          Do NOTHING (this.enemies is already empty)
-        // Else new room has an enemy
-        //      If there is a currently ACTIVE enemy (from the previous room)
-        //          Replace enemy with the new enemy
-        //      Show enemy and player health displays
-
         if (moveIsValid) {
             const newRoom = room.exits[direction];
 
@@ -582,7 +572,7 @@ export default class Game {
             }
 
             // Activate traps
-            if (this.rooms[newRoom].trap) {
+            if (this.rooms[newRoom].isTrap) {
                 this.player.health -= 20;
                 this.printText("You triggered a trap! You take 20 damage.");
                 this.updateHealthDisplays();
@@ -630,7 +620,7 @@ export default class Game {
             };
 
             const visualElement = room.pixelArt.elements.find(
-                (element) => element.type === itemTypes[item]
+                (element: RoomElement) => element.type === itemTypes[item]
             );
 
             if (visualElement) {
