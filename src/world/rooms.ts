@@ -1,4 +1,32 @@
-const rooms = {
+import { EnemyNames } from "../entities/Enemy/Enemy";
+
+type Rooms = {
+    [roomName: string]: {
+        description: string;
+        exits: {
+            [direction: string]: string;
+        };
+        items: string[];
+        enemies: EnemyNames[];
+        pixelArt: {
+            background: string;
+            elements: RoomElement[];
+        };
+        isExit?: boolean;
+        isTrap?: boolean;
+    };
+};
+
+type RoomElement = {
+    type: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    color?: string;
+};
+
+const rooms: Rooms = {
     entrance: {
         description:
             "You stand at the entrance of a dark dungeon. The air is damp and cold. A flickering torch barely illuminates the stone walls. To the north, a narrow passage leads deeper into the dungeon.",
@@ -151,7 +179,7 @@ const rooms = {
             ]
         }
     }
-} as const;
+};
 
 export type RoomName = keyof typeof rooms;
 
