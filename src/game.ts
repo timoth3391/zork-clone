@@ -696,7 +696,7 @@ export default class Game {
     }
 
     /**
-     * Updates enemy and player health displays.
+:    * Updates enemy and player health displays.
      */
     updateBattleUI() {
         const room = this.rooms[this.player.currentRoom];
@@ -717,10 +717,15 @@ export default class Game {
     }
 
     attemptRun() {
+        const currentRoom = this.player.currentRoom;
+
+        if (!currentRoom)
+            throw new Error("Unable to attempt run, current room is invalid.");
+
         const chance = Math.random();
         if (chance > 0.3) {
             // 70% chance to run
-            const room = this.rooms[this.player.currentRoom];
+            const room = this.rooms[currentRoom];
             const exits = Object.keys(room.exits);
             if (exits.length > 0) {
                 const randomExit =
@@ -741,8 +746,18 @@ export default class Game {
         }
     }
 
-    attackEnemy(enemy) {
-        const room = this.rooms[this.player.currentRoom];
+    attackEnemy(enemy: EnemyNames) {
+        if (!this.canvas || !this.ctx)
+            throw new Error("Unable to attack enemy, canvas or ctx is null.");
+
+        const currentRoom = this.player.currentRoom;
+
+        if (!currentRoom)
+            throw new Error("Unable to attack enemy, current room is invalid.");
+
+        const room = this.rooms[currentRoom];
+
+        if (!room) throw new Error("Unable to attack enemy, room is invalid.");
 
         if (room.enemies.includes(enemy)) {
             this.printText(`You attack the ${enemy}!`, "combat-action");
