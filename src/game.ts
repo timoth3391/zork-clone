@@ -857,13 +857,18 @@ export default class Game {
         }
     }
 
-    openChest(target) {
+    openChest(target: string) {
         if (target !== "chest") {
             this.printText("What are you trying to open?");
             return;
         }
 
-        const room = this.rooms[this.player.currentRoom];
+        const currentRoom = this.player.currentRoom;
+
+        if (!currentRoom)
+            throw new Error("Unable to open chest, currentRoom is invalid.");
+
+        const room = this.rooms[currentRoom];
         if (!room.chestContents) {
             this.printText("There's no chest here to open.");
             return;
@@ -885,18 +890,13 @@ export default class Game {
         room.chestOpen = true;
         room.items.push(...room.chestContents);
 
+        if (!this.canvas)
+            throw new Error("Unable to resize canvas, this.canvas is null.");
+
         // Create particles effect
         const centerX = this.canvas.width / 2;
         const bottomY = this.canvas.height - this.canvas.height * 0.5;
         this.createParticles(centerX, bottomY, "#ff0", "collect");
-
-        // Update the chest visual to show it's open
-        const chestElement = room.pixelArt.elements.find(
-            (element) => element.type === "chest"
-        );
-        if (chestElement) {
-            chestElement.isOpen = true;
-        }
 
         this.printText("You open the chest.", "room-info");
         this.printText(
