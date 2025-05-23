@@ -91,7 +91,10 @@ export default class Game {
     }
 
     resizeCanvas() {
-        const container = this.canvas.parentElement;
+        if (!this.canvas)
+            throw new Error("Unable to resize canvas, this.canvas is null.");
+
+        const container = this.canvas.parentElement!;
         this.canvas.width = container.clientWidth;
         this.canvas.height = container.clientHeight;
 
@@ -468,6 +471,8 @@ export default class Game {
             return;
         }
 
+        console.log(this.player.previousRoom);
+
         // Store current room before moving
         const currentRoom = this.player.currentRoom;
 
@@ -534,6 +539,7 @@ export default class Game {
             if (previousRoomEnemies.length) this.removeEnemy();
 
             if (newRoomEnemies.length) {
+                console.log("waht is this.context", this.context);
                 this.enemies = newRoomEnemies.map((enemyName: EnemyNames) => {
                     const enemyInstance = new Enemy({
                         gameContext: this.context,
