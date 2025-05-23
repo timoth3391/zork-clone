@@ -509,8 +509,6 @@ export default class Game {
             return;
         }
 
-        console.log(this.player.previousRoom);
-
         // Store current room before moving
         const currentRoom = this.player.currentRoom;
 
@@ -535,9 +533,6 @@ export default class Game {
     }
 
     removeEnemy() {
-        // const currentEnemy = this.enemies[0];
-        // currentEnemy.healthDisplay.remove();
-
         // Clear all enemies and their health displays
         this.enemies = [];
         this.enemyHealthDisplays.forEach((display) => display.remove());
@@ -577,7 +572,6 @@ export default class Game {
             if (previousRoomEnemies.length) this.removeEnemy();
 
             if (newRoomEnemies.length) {
-                console.log("waht is this.context", this.context);
                 this.enemies = newRoomEnemies.map((enemyName: EnemyNames) => {
                     const enemyInstance = new Enemy({
                         gameContext: this.context,
