@@ -7,6 +7,27 @@ export type GameContext = {
     registerHealthDisplay: (display: HealthDisplay) => void;
 };
 
+type ParticleConfig = {
+    [key: string]: {
+        count: number;
+        spread: number;
+        speed: number;
+        life: number;
+    };
+};
+
+type Particle = {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    color: string;
+    life: number;
+    maxLife: number;
+    opacity: number;
+};
+
 export default class Game {
     context: GameContext;
     rooms: typeof rooms;
@@ -16,13 +37,16 @@ export default class Game {
     canvas: HTMLCanvasElement | null;
     ctx: CanvasRenderingContext2D | null;
     backgrounds: Record<string, HTMLImageElement>;
-    particles: [];
+    particles: Particle[];
     fadeOutElements: [];
     dyingElements: [];
     lastTime: number;
     // enemy: Enemy | null;
     enemies: Enemy[];
     enemyHealthDisplays: HealthDisplay[];
+    itemImages: Record<string, HTMLImageElement>;
+    sounds: Record<string, HTMLAudioElement>;
+    aspectRatio: number | null;
 
     constructor() {
         this.context = {
@@ -44,6 +68,7 @@ export default class Game {
 
         this.canvas = canvasEl;
         this.ctx = this.canvas.getContext("2d");
+        this.aspectRatio = null;
 
         // Set up canvas sizing
         this.resizeCanvas();
@@ -114,7 +139,7 @@ export default class Game {
         });
     }
 
-    updateParticles(deltaTime) {
+    updateParticles(deltaTime: number) {
         // Update particle positions and lifetimes
         this.particles = this.particles.filter((particle) => {
             particle.x += particle.vx * (deltaTime / 16);
@@ -142,8 +167,8 @@ export default class Game {
         });
     }
 
-    createParticles(x, y, color, type = "collect") {
-        const particleConfigs = {
+    createParticles(x: number, y: number, color: string, type = "collect") {
+        const particleConfigs: ParticleConfig = {
             collect: {
                 count: 15,
                 spread: 100,
@@ -178,15 +203,28 @@ export default class Game {
     }
 
     renderPixelArt() {
+        if (!this.ctx || !this.canvas || !this.aspectRatio)
+            throw new Error(
+                "Unable to render pixel art, canvas, ctx, or aspectRatio is null."
+            );
+
         // Clear canvas with black
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw appropriate background based on room type
-        const room = this.rooms[this.player.currentRoom];
+        const currentRoom = this.player.currentRoom;
+
+        if (!currentRoom)
+            throw new Error(
+                "Unable to render pixel art, current room is invalid."
+            );
+
+        const room = this.rooms[currentRoom];
         const isAtDoor =
             room.isExit ||
-            room.currentRoom === "entrance" ||
+            // room.currentRoom === "entrance" ||
+            currentRoom === "entrance" ||
             room.description.toLowerCase().includes("door");
 
         const backgroundImage = isAtDoor
