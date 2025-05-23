@@ -1,5 +1,6 @@
 // import styles from "./Enemy.module.css";
 
+import { GameContext } from "../../game";
 import HealthDisplay from "../../ui/HealthDisplay/HealthDisplay";
 
 const ENEMIES = {
@@ -35,6 +36,7 @@ const ENEMIES = {
 
 export type EnemyNames = keyof typeof ENEMIES;
 type EnemyParams = {
+    gameContext: GameContext;
     name: EnemyNames;
 };
 
@@ -45,7 +47,7 @@ export default class Enemy {
     healthDisplay: HealthDisplay;
     image: HTMLImageElement;
 
-    constructor({ name }: EnemyParams) {
+    constructor({ gameContext, name }: EnemyParams) {
         const enemyData = ENEMIES[name];
 
         this.name = name;
@@ -60,6 +62,8 @@ export default class Enemy {
             currentHp: this.health,
             maxHp: this.maxHealth
         });
+
+        gameContext.registerHealthDisplay(this.healthDisplay);
     }
 
     /**
